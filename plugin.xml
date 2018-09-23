@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<plugin xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
+    <label>One Page Checkout</label>
+    <version>1.0.0</version>
+    <copyright>metaroom.net</copyright>
+    <license>MIT</license>
+    <link>https://metaroom.net/</link>
+    <author>Maxi Arnicke</author>
+    <description>One Page Checkout</description>
+</plugin>

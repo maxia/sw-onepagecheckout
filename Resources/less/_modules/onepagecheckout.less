@@ -1,0 +1,209 @@
+
+.checkout {
+    .checkout--info-header {
+        .unitize-margin(15, 0);
+    }
+
+    .checkout--personal-data > .panel {
+        float: none;
+    }
+}
+
+.checkout--section {
+    .unitize(margin-bottom, 15);
+
+    &.checkout--confirm {
+        margin-bottom: 0;
+    }
+
+    &:after {
+        content: "";
+        clear: both;
+    }
+}
+
+.checkout--section--disabled {
+    position: relative;
+
+    &:before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        opacity: 0.6;
+        z-index: 100;
+    }
+}
+
+.checkout--step-title {
+    .unitize-padding(0, 10);
+
+    .icon {
+        .secondary-gradient();
+        .border-radius(22px);
+        .unitize-padding(10, 16);
+        .unitize-width(46, 16);
+        .unitize(font-size, 20);
+        display: inline-block;
+        text-align: center;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    &.is--active .icon {
+        .primary-gradient();
+        color: #fff;
+    }
+
+    // Text
+    .text {
+        display: inline-block;
+        .unitize-margin(0, 0, 0, 10);
+        position: relative;
+        vertical-align: baseline;
+        .unitize(font-size, 20);
+    }
+
+    &.is--active .text {
+        color: @brand-primary;
+        display: inline-block;
+        font-weight: bold;
+    }
+}
+
+// Personal data section
+.checkout--personal-data--body {
+    display: flex;
+}
+
+.checkout--personal-data--forms {
+    width: 100%;
+}
+
+// Register advantages
+.checkout--register--advantages {
+    display: none;
+    .unitize(margin-left, 15);
+
+    > .register--advantages,
+    > .block {
+        float: none !important;
+        width: 100%;
+    }
+
+    .panel--title {
+        .unitize-margin(0, 0, 10, 0, 16);
+    }
+}
+
+@media screen and (min-width: @tabletViewportWidth) {
+    // display login form and advantages list side-by-side
+    .checkout--personal-data--forms {
+        width: 62%;
+    }
+    .checkout--register--advantages {
+        width: 34%;
+        display: block;
+
+        .register--advantages {
+            display: block;
+        }
+    }
+}
+
+// Collapse panels
+.checkout--personal-data .register--existing-customer  > .panel--title,
+.checkout--personal-data .register--content .register--personal > .panel--title {
+    cursor: pointer;
+    
+    &:after {
+        color: inherit;
+        content: "";
+        font-family: "shopware";
+        font-size: 0.375rem;
+        font-weight: normal;
+        height: 1rem;
+        line-height: 1rem;
+        width: 1rem;
+        float: right;
+        .unitize(margin-top, 5);
+    }
+
+    &.is--active::after {
+        content: "";
+    }
+}
+
+.checkout--personal-data {
+
+    .register--login {
+        float: none;
+        width: auto;
+    }
+
+    .register--content {
+        float: none;
+        width: auto;
+
+        .register--personal {
+            padding-bottom: 0;
+        }
+
+        .panel--body {
+            padding-bottom: 0;
+        }
+    }
+}
+
+// Panel when logged in
+.checkout--personal-data .information--panel.billing--panel {
+    float: left;
+    width: 50%;
+}
+
+.checkout--personal-data .information--panel.shipping--panel {
+    width: 50%;
+    float: right;
+}
+
+.checkout--personal-data .logout-panel {
+    p {
+        margin-bottom: 0;
+    }
+}
+
+// Shipping payment step
+.checkout--shipping-payment {
+    .payment--method-headline,
+    .dispatch--method-headline {
+        .unitize(padding-top, 5) !important;
+        .unitize(margin-left, 5);
+        margin-right: 0;
+        .unitize(margin-bottom, 25) !important;
+    }
+
+    .payment--method-list,
+    .dispatch--method-list {
+        .unitize-padding(0, 15);
+    }
+
+    .payment--method .method--description > img {
+        .unitize(margin-top, 15);
+    }
+}
+
+.checkout--confirm .product--table .basket--footer {
+    .unitize-margin(0, -20, -20, -20) !important;
+}
+
+@media screen and (max-width: @tabletViewportWidth) {
+    .checkout--confirm .product--table .basket--footer .aggregation--list {
+        .unitize(padding, 20) !important;
+    }
+}
+
+// paypal plus
+.checkout--shipping-payment #ppplus {
+    .unitize(margin-left, 40);
+}
