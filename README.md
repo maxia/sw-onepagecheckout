@@ -2,9 +2,6 @@
 
 Combines all checkout steps on one page.  
 
-## Screenshot
-![Screenshot](https://github.com/maxia/sw-onepagecheckout/raw/master/screenshot.png)
-
 ## Installing
 
 <pre>
@@ -20,3 +17,6 @@ cd ../../
 ## License
 
 [MIT](https://raw.github.com/maxia/sw-onepagecheckout/master/LICENSE)
+
+## Screenshot
+![Screenshot](https://github.com/maxia/sw-onepagecheckout/raw/master/screenshot.png)
