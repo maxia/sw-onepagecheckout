@@ -2,6 +2,9 @@
 
 Combines all checkout steps on one page.  
 
+## Screenshot
+![Screenshot](https://github.com/maxia/sw-onepagecheckout/raw/master/screenshot.png)
+
 ## Installing
 
 <pre>
