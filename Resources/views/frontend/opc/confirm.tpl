@@ -117,7 +117,8 @@
         </div>
 
         {block name='frontend_checkout_confirm_form'}
-            <form id="confirm--form" method="post" action="{url controller='checkout' action='confirm'}">
+            <form id="confirm--form" method="post" action="{url controller='checkout' action='finish'}">
+
                 {* AGB and Revocation *}
                 {block name='frontend_checkout_confirm_tos_panel'}
                     {include file="frontend/opc/partials/confirm-tos.tpl"}

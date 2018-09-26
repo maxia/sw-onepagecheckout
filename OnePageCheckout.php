@@ -28,11 +28,13 @@ class OnePageCheckout extends \Shopware\Components\Plugin
 
 	public function activate(ActivateContext $context)
     {
+        $this->clearCache();
 		return true;
 	}
 
 	public function deactivate(DeactivateContext $context)
     {
+        $this->clearCache();
 		return true;
 	}
 
@@ -40,6 +42,16 @@ class OnePageCheckout extends \Shopware\Components\Plugin
     {
 		return true;
 	}
+
+	private function clearCache()
+    {
+        $cache = Shopware()->Container()->get('shopware.cache_manager');
+        $cache->getCoreCache()->clean();
+        $cache->clearProxyCache();
+        $cache->clearTemplateCache();
+        $cache->clearConfigCache();
+        $cache->clearRewriteCache();
+    }
 
     public function build(ContainerBuilder $container)
     {

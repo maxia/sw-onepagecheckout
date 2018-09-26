@@ -26,7 +26,7 @@ class Shopware_Controllers_Frontend_OnePageCheckout extends Enlight_Controller_A
         if ($this->Request()->getActionName() == 'payment' ||
             $this->Request()->getActionName() == 'finish')
         {
-            // set request params from last request
+            // use checkout params from last request
             if (isset($this->session['checkoutParams']) && $this->session['checkoutParams']) {
                 $this->Request()->setParams(
                     $this->session['checkoutParams'],
@@ -131,9 +131,15 @@ class Shopware_Controllers_Frontend_OnePageCheckout extends Enlight_Controller_A
             $this->View()->sDispatch = $this->checkout->getSelectedDispatch();
             $this->View()->sDispatches = $this->checkout->getDispatches($this->View()->sFormData['payment']);
 
-            $params = ['sTarget' => 'checkout', 'sTargetAction' => 'confirm', 'showNoAccount' => true];
+            $params = [
+                'sTarget' => 'checkout',
+                'sTargetAction' => 'confirm',
+                'showNoAccount' => true,
+                'forceSecure' => true
+            ];
 
             if ($this->Request()->isPost()) {
+                // handle login and register forms
                 if ($this->Request()->getParam('registerAction')) {
                     $this->forward('saveRegister', 'register', null, $params);
 
@@ -141,7 +147,7 @@ class Shopware_Controllers_Frontend_OnePageCheckout extends Enlight_Controller_A
                     $this->forward('login', 'account', null, $params);
                 }
             } else {
-                // always run the register/index action to populate forms
+                // run the register/index action to populate forms
                 $this->forward('index', 'register', null, $params);
             }
         } else {
@@ -194,7 +200,11 @@ class Shopware_Controllers_Frontend_OnePageCheckout extends Enlight_Controller_A
             // order is valid
             $this->checkout->saveTemporaryOrder();
 
-            $this->session['sOrderVariables'] = new ArrayObject($this->View()->getAssign(), ArrayObject::ARRAY_AS_PROPS);
+            $sOrderVariables = $this->View()->getAssign();
+            $sOrderVariables['sBasketView'] = $sOrderVariables['sBasket'];
+            $sOrderVariables['sBasket'] = $this->checkout->getBasket(false);
+
+            $this->session['sOrderVariables'] = new ArrayObject($sOrderVariables, ArrayObject::ARRAY_AS_PROPS);
 
             $agbChecked = $this->Request()->getParam('sAGB');
             if (!empty($agbChecked)) {
@@ -228,11 +238,11 @@ class Shopware_Controllers_Frontend_OnePageCheckout extends Enlight_Controller_A
                 $this->View()->assign('sVoucherError', $voucherErrors);
             }
 
-            if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId', null))) {
+            if (empty($activeBillingAddressId = $this->session->offsetGet('checkoutBillingAddressId'))) {
                 $activeBillingAddressId = $userData['additional']['user']['default_billing_address_id'];
             }
 
-            if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId', null))) {
+            if (empty($activeShippingAddressId = $this->session->offsetGet('checkoutShippingAddressId'))) {
                 $activeShippingAddressId = $userData['additional']['user']['default_shipping_address_id'];
             }
 
@@ -247,10 +257,9 @@ class Shopware_Controllers_Frontend_OnePageCheckout extends Enlight_Controller_A
                     'sAGB' => $this->View()->sAGBChecked
                 ];
 
-                if ($payment['embediframe'] || $payment['action'])
+                if ($payment['embediframe'] || $payment['action']) {
                     $this->redirect(['controller' => 'checkout', 'action' => 'payment']);
-                else
-                    $this->redirect(['controller' => 'checkout', 'action' => 'finish']);
+                }
             }
         }
     }
@@ -335,6 +344,7 @@ class Shopware_Controllers_Frontend_OnePageCheckout extends Enlight_Controller_A
                 return true;
             }
         }
+
         return false;
     }
 

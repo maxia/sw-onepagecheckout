@@ -36,7 +36,6 @@
             StateManager.addPlugin(this.opts.registerPanelTitleSelector, 'swCollapsePanel');
         },
 
-
         reinitializeSections: function() {
             $.publish('plugin/onePageCheckout/initSections', [ this ]);
 
@@ -44,11 +43,8 @@
             $container.find('input[type="submit"][form], button[form]').swFormPolyfill();
             $container.find('select:not([data-no-fancy-select="true"])').swSelectboxReplacement();
 
-            /*
-            StateManager.addPlugin(this.opts.shippingPaymentConfirmSectionSelector + ' input[type="number"]', 'numberInput');
-            StateManager.addPlugin(this.opts.shippingPaymentConfirmSectionSelector + ' .number-input-apply-button', 'cartApplyButton');
-            */
             StateManager.addPlugin(this.opts.shippingPaymentConfirmSectionSelector + ' *[data-preloader-button="true"]', 'swPreloaderButton');
+            StateManager.addPlugin('*[data-auto-submit="true"]', 'swAutoSubmit');
 
             this.initAjaxShippingPayment();
             this.initAjaxQuantity();
@@ -63,8 +59,9 @@
                 $form = $container.find(this.opts.confirmFormSelector),
                 $inputs = $container.find(this.opts.shippingPaymentInputSelector),
                 $confirmSection = this.$el.find(this.opts.confirmSectionSelector),
-                $shippingPaymentSection = this.$el.find(this.opts.shippingPaymentSectionSelector),
-                url = $form.attr('action');
+                $shippingPaymentSection = this.$el.find(this.opts.shippingPaymentSectionSelector);
+
+            var url = $form.attr('action').replace('/finish', '/confirm');
 
             // submit radio buttons together with confirm form
             $shippingPaymentSection.find('.payment--method-list input, .dispatch--method-list input')
@@ -107,28 +104,35 @@
             $forms.on('submit', function() {
                 var $form = $(this);
 
+                console.log('submit', $form);
+
                 $confirmSection.addClass('checkout--section--disabled');
                 $shippingPaymentSection.addClass('checkout--section--disabled');
                 $.loadingIndicator.open({
                     openOverlay: false
-                });
+                }).then(function() {
+                    var data = $confirmForm.serialize() + '&' + $form.serialize() + '&isXHR=1';
 
-                var data = $confirmForm.serialize() + '&' + $form.serialize() + '&isXHR=1';
+                    $.ajax({
+                        type: "POST",
+                        url: $form.attr('action'),
+                        data: data,
+                        success: function(res) {
+                            $container.replaceWith(res);
 
-                $.ajax({
-                    type: "POST",
-                    url: $form.attr('action'),
-                    data: data,
-                    success: function(res) {
-                        $container.replaceWith(res);
+                            $.publish('plugin/onePageCheckout/quantityChanged', [ me, data ]);
+                            me.reinitializeSections();
 
-                        $.publish('plugin/onePageCheckout/quantityChanged', [ me, data ]);
-                        me.reinitializeSections();
-
-                        $.loadingIndicator.close();
-                        window.picturefill();
-
-                    }
+                            /*
+                            $.loadingIndicator.close(function() {
+                                $.overlay.close();
+                            });
+                            */
+                            // @todo why is the loadingIndicator not closing?
+                            $('.js--loading-indicator, .js--overlay').remove();
+                            window.picturefill();
+                        }
+                    });
                 });
 
                 return false;

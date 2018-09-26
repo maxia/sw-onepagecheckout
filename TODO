@@ -1,0 +1,4 @@
+- full i18n support (some labels are missing)
+- find a better way to reuse default templates
+- find a better way to override checkout page and reuse the checkout controller
+- tests

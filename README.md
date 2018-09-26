@@ -1,6 +1,7 @@
 # One Page Checkout for Shopware
 
 Combines all checkout steps on one page.  
+Tested with Shopware CE 5.5.1
 
 ## Installing
 
@@ -10,8 +11,6 @@ git clone https://github.com/maxia/sw-onepagecheckout.git OnePageCheckout
 cd ../../
 ./bin/console sw:plugin:refresh
 ./bin/console sw:plugin:install --activate OnePageCheckout
-./bin/console sw:cache:clear
-./bin/console sw:theme:cache:generate
 </pre>
 
 ## License
